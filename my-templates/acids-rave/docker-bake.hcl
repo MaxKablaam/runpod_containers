@@ -3,7 +3,7 @@ variable "RELEASE" {
 }
 
 variable "IMAGE_NAME" {
-    default = "runpod/acids-rave"
+    default = "maxkablaam/acids-rave"
 }
 
 target "default" {
