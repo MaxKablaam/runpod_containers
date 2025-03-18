@@ -9,7 +9,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # VS Code Server Environment Variables
 ENV VSCODE_SERVE_MODE=remote
 
-#TODO: try installing python3.9 instead, and don't install conda later.
 # Install System Packages
 RUN apt-get update -y && \
     apt-get upgrade -y && \
@@ -26,35 +25,20 @@ RUN apt-get update -y && \
     openssh-server  \
     build-essential \
     ffmpeg \
-    python3.10-dev python3.10-venv \
+    python3.9-dev python3.9-venv \
     gnome-keyring wget curl ca-certificates \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-#TODO: If we can install python3.9, we need to update this to follow.
 # Set up Python and pip
-RUN ln -s /usr/bin/python3.10 /usr/bin/python && \
+RUN ln -s /usr/bin/python3.9 /usr/bin/python && \
     rm /usr/bin/python3 && \
-    ln -s /usr/bin/python3.10 /usr/bin/python3 && \
+    ln -s /usr/bin/python3.9 /usr/bin/python3 && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py
 
-RUN pip install --upgrade pip && pip install jupyterlab
-
-#TODO: Might be able to remove conda, and just rely on python installed above
-# Set up MiniConda
-RUN wget -q https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    bash /tmp/miniconda.sh -b -p /opt/miniconda && \
-    rm /tmp/miniconda.sh
-
-ENV PATH="/opt/miniconda/bin:$PATH"
-
-RUN conda create -n rave python=3.9 -y && \
-    echo "conda activate rave" >> ~/.bashrc
-
-#TODO: If conda is removed, install rave in the pip command above.
-# Install RAVE
-RUN pip install acids-rave
-
+RUN pip install --upgrade pip && \
+    pip install jupyterlab && \
+    pip install acids-rave
 
 # Install vscode-server
 COPY src/vscode-server-setup.sh /tmp/vscode-server-setup.sh
