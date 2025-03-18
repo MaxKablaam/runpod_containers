@@ -25,6 +25,7 @@ RUN apt-get update -y && \
     openssh-server  \
     build-essential \
     ffmpeg \
+    unzip \
     python3.9-dev python3.9-venv \
     gnome-keyring wget curl ca-certificates \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
